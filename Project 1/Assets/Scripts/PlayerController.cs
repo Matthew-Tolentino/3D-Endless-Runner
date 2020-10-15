@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -50,6 +51,13 @@ public class PlayerController : MonoBehaviour
 
     // Camera position veriables
     public GameObject camPos;
+
+    // Coin variables
+    public Text coinTxt;
+
+    private int coinsCollected;
+
+    public bool dead = false;
 
     // Start is called before the first frame update
     void Start()
@@ -132,6 +140,20 @@ public class PlayerController : MonoBehaviour
         if (obj.gameObject.CompareTag("Ground"))
         {
             jumpsLeft = jumpTimes;
+        }
+
+        if (obj.gameObject.CompareTag("Obstacle"))
+        {
+            dead = true;
+        }
+    }
+
+    void OnTriggerEnter(Collider obj)
+    {
+        if (obj.gameObject.CompareTag("Coin"))
+        {
+            coinTxt.text = "Coins: " + ++coinsCollected;
+            Destroy(obj.gameObject);
         }
     }
 
