@@ -11,16 +11,20 @@ public class GameManager : MonoBehaviour
 
     public Camera thirdPersonCam;
 
-    private PlayerController player;
+    public GameObject player;
+
+    private PlayerController playerCont;
 
     public bool pause = false;
 
     private bool viewCam = false;
 
+    public List<GameObject> obstacles;
+
     // Start is called before the first frame update
     void Start()
     {
-        player = GameObject.Find("Player").GetComponent<PlayerController>();
+        playerCont = player.GetComponent<PlayerController>();
     }
 
     // Update is called once per frame
@@ -34,9 +38,24 @@ public class GameManager : MonoBehaviour
         }
 
         // Check if game over
-        if (player.dead)
+        if (playerCont.dead)
         {
             SceneManager.LoadScene("FirstRun");
+        }
+
+        //Check if player has passed obstacle
+        for (int i = 0; i < obstacles.Count; i++)
+        {
+            CheckObs(obstacles[i]);
+        }
+    }
+
+    void CheckObs(GameObject obs)
+    {
+        if (obs.transform.position.z < player.transform.position.z)
+        {
+            obs.GetComponent<ObstacleScript>().SelfDestruct();
+            obstacles.Remove(obs);
         }
     }
 
@@ -69,13 +88,13 @@ public class GameManager : MonoBehaviour
     public void Save()
     {
         Debug.Log("Game Saved!");
-        player.Save();
+        playerCont.Save();
     }
 
     public void Load()
     {
         Debug.Log("Game Loaded");
-        player.Load();
+        playerCont.Load();
     }
 
     public void SwitchCamera()

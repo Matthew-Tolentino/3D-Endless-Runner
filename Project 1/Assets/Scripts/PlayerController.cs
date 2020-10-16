@@ -7,13 +7,15 @@ public class PlayerController : MonoBehaviour
 {
     private Rigidbody rb;
 
-    private Renderer rend;
+    //private Renderer rend;
 
-    public Camera cam;
+    private GFXController GFX;
 
-    public Material jumpColor;
+    //public Camera cam;
 
-    public Material originalColor;
+    //public Material jumpColor;
+
+    //public Material originalColor;
 
     // Movement
     [Header("Movement")]
@@ -25,9 +27,7 @@ public class PlayerController : MonoBehaviour
 
     // Jump Variables
     [Header("Jump Variables")]
-    private bool oddRotation = true;
-
-    private bool jump, spinMove = false;
+    private bool jump = false;
 
     public int jumpTimes = 2;
 
@@ -64,11 +64,9 @@ public class PlayerController : MonoBehaviour
     { 
         rb = GetComponent<Rigidbody>();
 
-        rend = GetComponent<Renderer>();
+        GFX = GameObject.Find("GFX").GetComponent<GFXController>();
 
         jumpsLeft = jumpTimes;
-
-        scaleChange = new Vector3(scaleRate, scaleRate, scaleRate);
     }
 
     // Update is called once per frame
@@ -77,10 +75,10 @@ public class PlayerController : MonoBehaviour
         horizontalMove = Input.GetAxisRaw("Horizontal");
         jump = Input.GetKeyDown(KeyCode.W);
         
+        // Teleport
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            tele = true;
-            cam.transform.parent = null;
+            GFX.tele = true;
         }
 
         // Jump Character
@@ -91,27 +89,15 @@ public class PlayerController : MonoBehaviour
             jumpsLeft--;
             if (jumpsLeft == 0)
             {
-                spinMove = true;
-                rend.material = jumpColor;
-                cam.transform.parent = null;
+                GFX.spinMove = true;
+                GFX.rend.material = GFX.jumpColor;
             }
             jump = false;
         }
 
-        if (tele)
-        {
-            if (scalePhase == 0)
-                ScaleDown();
-            if (scalePhase == 1)
-                Teleport();
-            if (scalePhase == 2)
-                ScaleUp();
-        }
-
-        if (spinMove)
-        {
-            Spin();
-        }
+        // Check to see if player fell
+        if (transform.position.y < -5)
+            dead = true;
     }
 
     // Physics here
@@ -157,65 +143,13 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void ScaleDown()
+   public void Teleport()
     {
-        transform.localScale -= scaleChange;
-
-        if (transform.localScale.x <= 0)
-            scalePhase = 1;
-    }
-
-    void ScaleUp()
-    {
-        transform.localScale += scaleChange;
-
-        if (transform.localScale.x >= 1)
-        {
-            scalePhase = 0;
-            tele = false;
-            if (!spinMove) // Check to see if spinning
-                SetCam();
-        }
-    }
-
-    void Teleport()
-    {
-        //TURN OFF GRAVITY
         Vector3 newPos = new Vector3(transform.position.x, transform.position.y, transform.position.z + teleDist);
 
         transform.position = newPos;
 
-        scalePhase = 2;
-    }
-
-    void Spin()
-    {
-        transform.Rotate(0, spinSpeed * Time.deltaTime, 0);
-        if (transform.localRotation.y <= 0 && oddRotation)
-        {
-            rend.material = originalColor;
-            oddRotation = !oddRotation;
-            transform.localRotation = Quaternion.Euler(transform.localRotation.x, 0, transform.localRotation.z);
-            if (!tele) 
-                SetCam();
-            spinMove = false;
-        }
-        else if (transform.localRotation.y <= 0 && !oddRotation)
-        {
-            rend.material = originalColor;
-            oddRotation = !oddRotation;
-            transform.localRotation = Quaternion.Euler(transform.localRotation.x, 0, transform.localRotation.z);
-            if (!tele)
-                SetCam();
-            spinMove = false;
-        }
-
-    }
-
-    void SetCam()
-    {
-        cam.transform.position = camPos.transform.position;
-        cam.transform.parent = transform;
+        GFX.scalePhase = 2;
     }
 
     // Save and Load

@@ -6,6 +6,10 @@ public class LevelGenerator : MonoBehaviour
 {
     public Transform playerPos;
 
+    public GameManager manager;
+
+    private GameObject obs;
+
     [Header("Level Objects")]
     public GameObject floor;
 
@@ -73,21 +77,26 @@ public class LevelGenerator : MonoBehaviour
     void SpawnObstacle()
     {
         float pick = Random.Range(0.0f, 3.0f);
+        //GameObject obs = null;
         if (pick <= 1.0f)
         {
             obstacleSpawnPos = new Vector3(playerPos.position.x, 0.75f, obstacleLastSpawn.z + distanceFromPlayer);
-            Instantiate(obstacle1, obstacleSpawnPos, Quaternion.identity);
+            obs = Instantiate(obstacle1, obstacleSpawnPos, Quaternion.identity);
+            //manager.obstacles.Add(obs);
         }
         else if (pick <= 2.0f)
         {
             obstacleSpawnPos = new Vector3(playerPos.position.x, 1.75f, obstacleLastSpawn.z + distanceFromPlayer);
-            Instantiate(obstacle2, obstacleSpawnPos, Quaternion.identity);
+            obs = Instantiate(obstacle2, obstacleSpawnPos, Quaternion.identity);
+            //manager.obstacles.Add(obs);
         }
         else if (pick <= 3.0f)
         {
             obstacleSpawnPos = new Vector3(playerPos.position.x, 4.25f, obstacleLastSpawn.z + distanceFromPlayer);
-            Instantiate(obstacle3, obstacleSpawnPos, Quaternion.identity);
+            obs = Instantiate(obstacle3, obstacleSpawnPos, Quaternion.identity);
+            //manager.obstacles.Add(obs);
         }
+        manager.obstacles.Add(obs);
         SpawnCoin();
     }
 
