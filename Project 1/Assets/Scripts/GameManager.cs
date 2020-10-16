@@ -5,11 +5,17 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject canvas;
+    public GameObject pauseCanvas;
+
+    public Camera firstPersonCam;
+
+    public Camera thirdPersonCam;
 
     private PlayerController player;
 
     public bool pause = false;
+
+    private bool viewCam = false;
 
     // Start is called before the first frame update
     void Start()
@@ -20,27 +26,34 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Check if game needs to be paused
         if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P))
         {
-            switch (pause) 
-            {
-                case false:
-                    pauseGame();
-                    //showPauseMenu();
-                    break;
-                case true:
-                    resumeGame();
-                    //hidePauseMenu();
-                    break;
-            }
-            canvas.SetActive(!pause);
-            pause = !pause;
+            Pause();
+            pauseCanvas.SetActive(!pause);
         }
 
+        // Check if game over
         if (player.dead)
         {
             SceneManager.LoadScene("FirstRun");
         }
+    }
+
+    void Pause()
+    {
+        switch (pause)
+        {
+            case false:
+                pauseGame();
+                //showPauseMenu();
+                break;
+            case true:
+                resumeGame();
+                //hidePauseMenu();
+                break;
+        }
+        pause = !pause;
     }
 
     void pauseGame()
@@ -65,15 +78,10 @@ public class GameManager : MonoBehaviour
         player.Load();
     }
 
-    /*
-    void showPauseMenu()
+    public void SwitchCamera()
     {
-        canvas.SetActive(!pause);
+        firstPersonCam.enabled = !viewCam;
+        thirdPersonCam.enabled = viewCam;
+        viewCam = !viewCam;
     }
-
-    void hidePauseMenu()
-    {
-        canvas.SetActive(!pause);
-    }
-    */
 }
