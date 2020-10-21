@@ -10,7 +10,7 @@ public class LevelGenerator : MonoBehaviour
 
     private GameObject obs;
 
-    [Header("Level Objects")]
+    [Header("Interactable Level Objects")]
     public GameObject floor;
 
     public GameObject coin;
@@ -21,8 +21,14 @@ public class LevelGenerator : MonoBehaviour
 
     public GameObject obstacle3;
 
+    [Header("Visual Level Objects")]
+    public GameObject redFlower;
+
     [Header("floor Spawning Variables")]
     public float spawnPlatformsAhead = 3.0f;
+
+    [Range(0, 5)]
+    public int Vegitation;
 
     private float floorSpawnDistance;
 
@@ -72,6 +78,7 @@ public class LevelGenerator : MonoBehaviour
         Instantiate(floor, floorSpawnPos, Quaternion.identity);
         floorLastSpawn = floorSpawnPos;
         floorSpawnPos = new Vector3(floorSpawnPos.x, floorSpawnPos.y - 3.0f, floorSpawnPos.z + floorSpawnOffset);
+        SpawnVegitation();
     }
 
     void SpawnObstacle()
@@ -105,5 +112,25 @@ public class LevelGenerator : MonoBehaviour
         Vector3 coinPosition = new Vector3(obstacleSpawnPos.x, 1.50f, obstacleSpawnPos.z - (distanceFromPlayer / 2));
         //Quaternion rot = new Quaternion(coin.transform.rotation.x, 0f, 0f);
         Instantiate(coin, coinPosition, coin.transform.rotation);
+    }
+
+    // Pick side of track to spawn on, get position based on spawning platform, add random scale
+    void SpawnVegitation()
+    {
+        for (int i = 0; i < Vegitation; i++)
+        {
+            float posX = 0;
+            float side = Random.Range(0.0f, 1.0f);
+            if (side < .5)  // left side
+                posX = Random.Range(-2.0f + floorSpawnPos.x, -1.2f + floorSpawnPos.x);
+            else            // right side
+                posX = Random.Range(1.5f + floorSpawnPos.x, 3.3f + floorSpawnPos.x);
+            float posZ = Random.Range(-6.0f + floorSpawnPos.z, 5.6f + floorSpawnPos.z);
+
+            Vector3 plantPos = new Vector3(posX, .25f, posZ);
+            GameObject flower = Instantiate(redFlower, plantPos, Quaternion.identity);
+            float size = Random.Range(0.3f, 1.0f);
+            flower.transform.localScale = new Vector3(size, size, size);
+        }
     }
 }

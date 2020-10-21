@@ -7,15 +7,7 @@ public class PlayerController : MonoBehaviour
 {
     private Rigidbody rb;
 
-    //private Renderer rend;
-
     private GFXController GFX;
-
-    //public Camera cam;
-
-    //public Material jumpColor;
-
-    //public Material originalColor;
 
     // Movement
     [Header("Movement")]
