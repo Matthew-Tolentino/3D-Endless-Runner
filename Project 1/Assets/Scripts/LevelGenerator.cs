@@ -62,6 +62,7 @@ public class LevelGenerator : MonoBehaviour
     void Update()
     {
         // Floor Spawning
+        Debug.Log(floorSpawnPos.z - playerPos.position.z + " : " + floorSpawnOffset * spawnPlatformsAhead);
         if (floorSpawnPos.z - playerPos.position.z < floorSpawnOffset * spawnPlatformsAhead)
             SpawnFloor();
 
@@ -122,10 +123,10 @@ public class LevelGenerator : MonoBehaviour
             float posX = 0;
             float side = Random.Range(0.0f, 1.0f);
             if (side < .5)  // left side
-                posX = Random.Range(-2.0f + floorSpawnPos.x, -1.2f + floorSpawnPos.x);
+                posX = Random.Range(-2.0f + floorLastSpawn.x, -1.2f + floorLastSpawn.x);
             else            // right side
-                posX = Random.Range(1.5f + floorSpawnPos.x, 3.3f + floorSpawnPos.x);
-            float posZ = Random.Range(-6.0f + floorSpawnPos.z, 5.6f + floorSpawnPos.z);
+                posX = Random.Range(1.5f + floorLastSpawn.x, 3.3f + floorLastSpawn.x);
+            float posZ = Random.Range(-6.0f + floorLastSpawn.z, 5.6f + floorLastSpawn.z);
 
             Vector3 plantPos = new Vector3(posX, .25f, posZ);
             GameObject flower = Instantiate(redFlower, plantPos, Quaternion.identity);

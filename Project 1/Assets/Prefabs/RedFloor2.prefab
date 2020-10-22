@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3950178797111385662}
   - component: {fileID: 3950178797111385663}
   - component: {fileID: 3087474215331864140}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: RedFloor2
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -190,6 +190,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: RedFloor2
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: fb8e5107156079c4bb9ff8c65f8966b5,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 8164078558771037576, guid: fb8e5107156079c4bb9ff8c65f8966b5,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fb8e5107156079c4bb9ff8c65f8966b5, type: 3}
